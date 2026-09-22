@@ -12,11 +12,11 @@ class Product:
         self.desc = Description
         self.price = Price
 class Customer:
-    def __init__(self , Name , Password , Money):
-        self.name = Name
+    def __init__(self , Username , Password , Money):
+        self.username = Username
         self.password = Password
         self.money = Money
-
+########################################################################################
 def add_product(product):
     # adding product into product table
     try:
@@ -59,3 +59,61 @@ def delete_product():
         print("deleted succesfully.")
     except Exception as e:
         print("error:" , e)
+#############################################################
+def check_username(username):  
+    query = "SELECT * FROM customer WHERE Username = ?"
+    cursor.execute(query , (username,))
+    result = cursor.fetchone()
+    if not result:
+        return True
+    return False       # این نام کاربری از قبل وجود داشته است
+def password_validation(password):
+    correct_password = True
+    if len(password)<8:
+        print("password must be at least 8 characters")
+        correct_password = False
+    has_alpha = any(char.isalpha() for char in password)
+    has_digit = any(char.isdigit() for char in password)
+    if  not has_alpha  or not has_digit:
+        print("password must has at least 1 character and 1 number")
+        correct_password = False
+    return correct_password
+
+def Register(customer):
+    try:
+        query = "INSERT INTO customer(Username , Password , Money) VALUES(? , ? , ?)"
+        parametrs = (customer.username ,  customer.password , customer.money)
+        cursor.execute(query , parametrs)
+        connection.commit()
+        print("added succesfully. thank you for sign up")
+    except Exception as e :
+        print("problem :" , e)
+        
+def Login():
+    login = False
+    username = input("enter your username:")
+    password = input("enter your password:")
+    try:
+        sql = "SELECT * FROM customer WHERE Username = ?"
+        cursor.execute(sql , (username,))
+        result = cursor.fetchone()
+        if not result:
+            print("no such username exist.")
+            return
+    except Exception as e:
+        print("error :" , e)
+    try:
+        query = "SELECT * FROM customer WHERE Username = ? AND Password = ?"
+        cursor.execute(query , (username , password))
+        result = cursor.fetchone()
+        if not result:
+            print("username or password is incorrect")
+        else:
+            print(f"welcome {username}")
+            login = True
+    except Exception as e:
+        print("problem :" , e)
+    if login:
+        return username
+    else:
+        return False
