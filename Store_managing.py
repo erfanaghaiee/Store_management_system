@@ -27,3 +27,35 @@ def add_product(product):
         print("product added succesfully.")
     except Exception as e:
         print("error:" , e)
+def show_product():
+    # print product in terminal
+    try: 
+        query = "SELECT * FROM product"
+        cursor.execute(query)
+        result = cursor.fetchall()
+        print("--- Products ---")
+        for product in result:
+            print(product)
+    except Exception as e:
+            print("error:" , e)
+            
+def edit_product_price():
+    try:
+        id = int(input("enter product id :"))
+        new_price = float(input("enter new product price :"))
+        query = "UPDATE product SET Price = ? WHERE ID = ?"
+        parametrs = (new_price , id )
+        cursor.execute(query , parametrs)
+        connection.commit()
+        print("edited succesfully.")
+    except Exception as e:
+        print("error:" , e)
+def delete_product():
+    try:
+        id = int(input("enter product id:"))
+        query = "DELETE FROM product WHERE ID = ?"
+        cursor.execute(query , (id,))
+        connection.commit()
+        print("deleted succesfully.")
+    except Exception as e:
+        print("error:" , e)
