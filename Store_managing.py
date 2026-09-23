@@ -127,3 +127,129 @@ def charge_money(username):
     except Exception as e:
         print("error:" , e)
 ########################################################################################
+'''
+# منوی ویژه مدیر
+===== STORE MANAGEMENT SYSTEM =====
+1. Product Management
+2. Customer Management
+3. Order Management
+4. Sales Report
+5. Export Report
+6. Exit
+'''
+'''
+# منوی ویژه مشتری ها
+print("===== CUSTOMER MENU =====")
+print("1. Show Products")
+print("2. Place Order")
+print("3. Charge Money")
+print("4. Back to Main Menu")
+'''
+
+logged_in_user = None
+manager_username = "erfan_aghaee"
+
+print("===== welocome to store =====")
+print("plese first login to your account or register if you don't have an account.")
+
+while True:
+    print("1. Login")
+    print("2. Register")
+    print("3. Exit")
+    print()
+    choice = input("enter your choice:")
+    if choice == "1":
+        logged_in_user = Login()
+        if logged_in_user == manager_username:
+            print("===== STORE MANAGEMENT SYSTEM =====")
+            print("1. Product Management")
+            print("2. Customer Management")
+            print("3. Order Management")
+            print("4. Sales Report")
+            print("5. Export Report")
+            print("6. Exit")
+            print()
+            while True:
+                choice = input("enter your choice:")
+                if choice == "1":
+                    print("1. Add Product")
+                    print("2. Show Products")
+                    print("3. Edit Product Price")
+                    print("4. Delete Product")
+                    print("5. Back to Main Menu")
+                    print()
+                    product_choice = input("enter your choice:")
+                    if product_choice == "1":
+                        name = input("enter product name:")
+                        desc = input("enter product description:")
+                        price = float(input("enter product price:"))
+                        product = Product(name , desc , price)
+                        add_product(product)
+                    elif product_choice == "2":
+                        show_product()
+                    elif product_choice == "3":
+                        edit_product_price()
+                    elif product_choice == "4":
+                        delete_product()
+                    elif product_choice == "5":
+                        break
+                    else:
+                        print("invalid choice. please try again.")
+                elif choice == "2":
+                    # مدیریت مشتری ها
+                    pass
+                elif choice == "3":
+                    # مدیریت سفارش ها
+                    pass
+                elif choice == "4":
+                    # گزارش فروش
+                    pass
+                elif choice == "5":
+                    # خروجی گرفتن از گزارش
+                    pass
+                elif choice == "6":
+                    print("exiting...")
+                    exit()
+                else:
+                    print("invalid choice. please try again.")
+        if logged_in_user and logged_in_user != manager_username:
+            while True:
+                print()
+                print("===== MENU =====")
+                print("1. Show Products")
+                print("2. Place Order")
+                print("3. Charge Money")
+                print("4. Exit")
+                print()
+                customer_choice = input("enter your choice:")
+                if customer_choice == "1":
+                    show_product()
+                elif customer_choice == "2":
+                    pass  # place order functionality can be implemented here
+                elif customer_choice == "3":
+                    charge_money(logged_in_user)
+                elif customer_choice == "4":
+                    break
+                else:
+                    print("invalid choice. please try again.")
+
+    elif choice == "2":
+        username = input("enter your username:")
+        if not check_username(username):
+            print("this username is already taken.")
+            continue
+        password = input("enter your password:")
+        if not password_validation(password):
+            continue
+        try:
+            money = float(input("enter your initial money:"))
+        except ValueError:
+            print("invalid amount. please enter a valid number.")
+            continue
+        customer = Customer(username , password , money)
+        Register(customer)
+    elif choice == "3":
+        print("exiting...")
+        exit()
+    else:
+        print("invalid choice. please try again.")
