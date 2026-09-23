@@ -59,7 +59,7 @@ def delete_product():
         print("deleted succesfully.")
     except Exception as e:
         print("error:" , e)
-#############################################################
+########################################################################################
 def check_username(username):  
     query = "SELECT * FROM customer WHERE Username = ?"
     cursor.execute(query , (username,))
@@ -117,3 +117,13 @@ def Login():
         return username
     else:
         return False
+def charge_money(username):
+    try:
+        amount = float(input("enter amount of money to charge:"))
+        query = "UPDATE customer SET Money = Money + ? WHERE Username = ?"
+        cursor.execute(query , (amount , username))
+        connection.commit()
+        print("charged succesfully.")
+    except Exception as e:
+        print("error:" , e)
+########################################################################################
