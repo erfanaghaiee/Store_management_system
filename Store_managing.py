@@ -127,6 +127,42 @@ def charge_money(username):
     except Exception as e:
         print("error:" , e)
 ########################################################################################
+# ثبت سفارش
+def order(username):
+    try:
+        product_id = int(input("enter product id :"))
+        quantify = int(input("how many do you want? :"))
+        # بدست اوردن قیمت محصول
+        sql = "SELECT Price FROM product WHERE ID = ?"
+        cursor.execute(sql , (product_id ,))
+        result = cursor.fetchone()
+        price = result[0]
+        total_price = quantify * price
+        print(type(total_price))
+        # پیدا کردن ایدی و پول کاربر
+        query = "SELECT ID , Money FROM customer WHERE Username = ?"
+        cursor.execute(query , (username ,))
+        result = cursor.fetchone()
+        customer_id = result[0]
+        money = result[1]
+        print(type(money))
+        # اضافه کردن به جدول سفارش ها
+        if money >= total_price:
+            query2 = "INSERT INTO orders(customer_id , product_id , quantify) VALUES(? , ? , ?)"
+            parametrs = (customer_id , product_id , quantify)
+            cursor.execute(query2 , parametrs)
+            connection.commit()
+            print("order placed.")
+            # کم کردن پول از حساب کاربر
+            query3 = "UPDATE customer SET Money = Money - ? WHERE Username = ?"
+            cursor.execute(query3 , (total_price , username))
+            connection.commit()
+        else:
+            print("your money is not enough")
+    except Exception as e:
+        print("error:" , e)
+
+########################################################################################
 '''
 # منوی ویژه مدیر
 ===== STORE MANAGEMENT SYSTEM =====
@@ -225,7 +261,7 @@ while True:
                 if customer_choice == "1":
                     show_product()
                 elif customer_choice == "2":
-                    pass  # place order functionality can be implemented here
+                    order(logged_in_user) # place order functionality can be implemented here
                 elif customer_choice == "3":
                     charge_money(logged_in_user)
                 elif customer_choice == "4":
